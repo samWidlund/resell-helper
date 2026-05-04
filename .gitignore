@@ -12,3 +12,6 @@ testing.py
 
 # virtual environment
 venv/
+
+# ai
+AGENTS.md
