@@ -15,7 +15,7 @@ client = gspread.authorize(credentials)
 sheet = client.open('publishProducts').sheet1
 
 # Fetch the first row of data
-first_col = sheet.col_values(1)
-second_col = sheet.col_values(2)
-print(f"First column of data: {first_col}")
-print(f"Second column of data: {second_col}")
+first_row = sheet.row_values(1)
+second_row = sheet.row_values(2)
+print(f"First row of data: {first_row}")
+print(f"Second row of data: {second_row}")
