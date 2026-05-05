@@ -18,6 +18,8 @@ sheet = client.open('publishProducts').sheet1
 # Fetch all rows of data
 records = sheet.get_all_records()
 
+print("file:///home/samme/repos/productScraper/output.html")
+
 # Build HTML with a copy button per product
 products_html = ""
 for i, r in enumerate(records):
@@ -49,7 +51,6 @@ html = f"""<!DOCTYPE html>
 </style>
 </head>
 <body>
-<h2>Kopiera till Instagram / Facebook</h2>
 {products_html}
 <script>
 function copyProduct(id) {{
