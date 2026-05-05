@@ -1,7 +1,6 @@
 name: Publish helper
 run-name: Product information formatting
 on:
-  push:
   workflow_dispatch:
 jobs:
   format-products:
