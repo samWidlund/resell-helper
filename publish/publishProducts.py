@@ -65,7 +65,7 @@ html = f"""<!DOCTYPE html>
 <head>
 <style>
   body {{ font-family: sans-serif; margin: 40px; background: #1a1a1a; color: #fff; }}
-  .product-card {{ background: #2a2a2a; padding: 20px; margin: 10px 0; border-radius: 8px; }}
+  .product-card {{ background: #2a2a2a; padding: 20px; margin: 10px 0; border-radius: 8px; width: fit-content; }}
   .field-row {{ display: flex; align-items: center; margin: 8px 0; }}
   .field-label {{ font-weight: bold; min-width: 120px; }}
   .field-value {{ flex: 1; margin: 0 10px; }}
