@@ -24,8 +24,7 @@ print("file:///home/samme/repos/productScraper/output.html")
 products_html = ""
 for i, r in enumerate(records):
     product_id = f"product-{i}"
-    product_text = f"""
-{r.get('title', '')}
+    product_text = f"""{r.get('title', '')}
 {r.get('price', '')}
 {r.get('brand', '')}
 {r.get('condition', '')}
