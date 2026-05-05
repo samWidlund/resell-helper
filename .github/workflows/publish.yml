@@ -2,7 +2,7 @@ name: Publish products
 run-name: Format product information
 on: [push]
 jobs:
-  check-bats-version:
+  format-products:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
