@@ -1,6 +1,8 @@
 name: Publish helper
 run-name: Product information formatting
-on: [push]
+on:
+  push:
+  workflow_dispatch:
 jobs:
   format-products:
     runs-on: ubuntu-latest
@@ -8,7 +10,6 @@ jobs:
       - uses: actions/checkout@v6
       - name: Create credentials.json
         run: echo '${{ secrets.CREDENTIALS_JSON }}' > credentials.json
-
       - run: |
           python -m pip install --upgrade pip
           pip install gspread oauth2client
