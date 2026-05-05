@@ -69,6 +69,7 @@ html = f"""<!DOCTYPE html>
   .field-row {{ display: flex; align-items: center; margin: 8px 0; }}
   .field-label {{ font-weight: bold; min-width: 120px; }}
   .field-value {{ flex: 1; margin: 0 10px; }}
+  .field-row:hover {{ background: #333; }}
   .copy-btn {{ cursor: pointer; background: #4CAF50; color: white; border: none; padding: 6px 12px; border-radius: 4px; }}
   .copy-btn:hover {{ background: #45a049; }}
   .copy-all-btn {{ cursor: pointer; background: #2196F3; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin-top: 10px; }}
@@ -81,12 +82,12 @@ html = f"""<!DOCTYPE html>
 <script>
 function copyField(id) {{
   const text = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(text).then(() => alert('Kopierat!'));
+  navigator.clipboard.writeText(text);
 }}
 
 function copyProduct(id) {{
   const text = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(text).then(() => alert('Kopierat!'));
+  navigator.clipboard.writeText(text);
 }}
 </script>
 </body>
