@@ -22,7 +22,7 @@ print("file:///home/samme/repos/productScraper/output.html")
 
 # Build HTML with copy buttons for each field and a common copy button
 products_html = ""
-for i, r in enumerate(records):
+for i, r in enumerate(reversed(records)):
     product_html = ""
     fields = [
         ('title', 'Titel'),
