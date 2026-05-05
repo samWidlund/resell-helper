@@ -1,5 +1,3 @@
-# script to publish products at mulitple platforms at once
-
 import webbrowser
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
