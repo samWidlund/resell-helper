@@ -1,6 +1,8 @@
 # script to publish products at mulitple platforms at once
 
+import webbrowser
 import gspread
+from pprint import pprint
 from oauth2client.service_account import ServiceAccountCredentials
 
 scope = [
@@ -15,7 +17,15 @@ client = gspread.authorize(credentials)
 sheet = client.open('publishProducts').sheet1
 
 # Fetch the first row of data
-first_row = sheet.row_values(1)
-second_row = sheet.row_values(2)
-print(f"First row of data: {first_row}")
-print(f"Second row of data: {second_row}")
+val = sheet.get_all_records()
+pprint(val)
+print(f'file:///home/samme/repos/productScraper/output.html')
+
+html = f"""
+<p>{val} kr</p>
+"""
+
+with open('output.html', 'w', encoding='utf-8') as f:
+    f.write(html)
+
+webbrowser.open('output.html')
