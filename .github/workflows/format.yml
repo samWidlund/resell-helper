@@ -1,5 +1,5 @@
-name: Publish products
-run-name: Format product information
+name: Publish helper
+run-name: Product information formatting
 on: [push]
 jobs:
   format-products:
