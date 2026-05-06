@@ -16,7 +16,9 @@ jobs:
           pip install gspread oauth2client python-telegram-bot requests
 
       - name: Debug
-        run: ls -la
+        run: |
+          ls -la
+          ls notification/
 
       - name: Run publishProducts.py
         run:  python publish/publishProducts.py
