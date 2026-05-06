@@ -1,6 +1,7 @@
 import webbrowser
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from notification.telegramBot import notify_publish
 
 scope = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -93,5 +94,7 @@ function copyProduct(id) {{
 
 with open('output.html', 'w', encoding='utf-8') as f:
     f.write(html)
+
+notify_publish()
 
 webbrowser.open('output.html')
