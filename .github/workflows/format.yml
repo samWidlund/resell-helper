@@ -11,5 +11,5 @@ jobs:
         run: echo '${{ secrets.CREDENTIALS_JSON }}' > credentials.json
       - run: |
           python -m pip install --upgrade pip
-          pip install gspread oauth2client
+          pip install gspread oauth2client python-telegram-bot requests
           python publish/publishProducts.py
