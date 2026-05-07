@@ -5,6 +5,10 @@ on: workflow_dispatch
 jobs:
   format-products:
     runs-on: ubuntu-latest
+    env:
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        BOT_CHAT_ID: ${{ secrets.BOT_CHAT_ID }}
+
     steps:
       - uses: actions/checkout@v6
       - name: Create credentials.json
