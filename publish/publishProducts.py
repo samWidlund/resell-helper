@@ -1,4 +1,6 @@
 import sys
+import os
+import time
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -22,6 +24,12 @@ sheet = client.open('publishProducts').sheet1
 records = sheet.get_all_records()
 
 print("file:///home/samme/repos/productScraper/output.html")
+
+# Send products to Telegram
+is_ci = os.getenv('CI') == 'true'
+for r in reversed(records):
+    notify_publish(r)
+    time.sleep(0.5)
 
 # Build HTML with copy buttons for each field and a common copy button
 products_html = ""
@@ -99,6 +107,5 @@ function copyProduct(id) {{
 with open('output.html', 'w', encoding='utf-8') as f:
     f.write(html)
 
-notify_publish()
-
-webbrowser.open('output.html')
+if not is_ci:
+    webbrowser.open('output.html')
