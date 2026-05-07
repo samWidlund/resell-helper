@@ -5,6 +5,7 @@ on: workflow_dispatch
 jobs:
   format-products:
     runs-on: ubuntu-latest
+    environment: telegramApi
     env:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         BOT_CHAT_ID: ${{ secrets.BOT_CHAT_ID }}
