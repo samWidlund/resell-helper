@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - If statement in workflow to prevent skipping.
+- Changed project name to ``resell-helper``
 
 ### Removed
 
