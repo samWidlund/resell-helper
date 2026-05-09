@@ -1,6 +1,5 @@
 import os
-import html
-from typing import Optional
+import json
 from dotenv import load_dotenv
 import requests
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, CopyTextButton
@@ -51,8 +50,6 @@ def get_sent_notifications():
     return sent_notifications
 
 # publish
-import json
-
 def notify_publish(product: dict):
     global sent_notifications
     if not TOKEN or not CHAT_ID:
