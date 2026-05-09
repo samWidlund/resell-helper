@@ -53,7 +53,7 @@ def get_sent_notifications():
 # publish
 import json
 
-def notify_publish(product: str):
+def notify_publish(product: dict):
     global sent_notifications
     if not TOKEN or not CHAT_ID:
         print("error: BOT_TOKEN or BOT_CHAT_ID could not be found as environment variables")
@@ -61,21 +61,34 @@ def notify_publish(product: str):
 
     url_api = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
+    text = (
+        f"{product['title']}\n"
+        f"{product['price']}\n"
+        f"{product['location']}\n"
+        f"{product['url']}"
+    )
+
+
+    # text + copy buttons for each field
     keyboard = {
         "inline_keyboard": [
             [
-                {
-                    "text": "📋 Kopiera text",
-                    "copy_text": {"text": product}  # max 256 characters, will be truncated if longer
-                }
+                {"text": "Title", "copy_text": {"text": product["title"]}},
+                {"text": "Price",  "copy_text": {"text": product["price"]}},
+            ],
+            [
+                {"text": "Location",   "copy_text": {"text": product["location"]}},
+                {"text": "Link",   "copy_text": {"text": product["url"]}},
+            ],
+            [
+                {"text": "Copy All", "copy_text": {"text": text}},
             ]
-        ]
-    }
+        ]}
 
     try:
         r = requests.post(url_api, data={
             "chat_id": CHAT_ID,
-            "text": product,
+            "text": text,
             "parse_mode": "HTML",
             "reply_markup": json.dumps(keyboard)
         }, timeout=10)
