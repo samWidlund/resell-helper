@@ -60,9 +60,15 @@ def notify_publish(product: dict):
 
     text = (
         f"{product['title']}\n"
+        f"{product['product']}\n"
         f"{product['price']}\n"
-        f"{product['location']}\n"
-        f"{product['url']}"
+        f"{product['brand']}\n"
+        f"{product['description']}\n"
+        f"{product['images']}\n"
+        f"{product['condition']}\n"
+        f"{product['hashtags']}\n"
+
+
     )
 
 
@@ -71,11 +77,19 @@ def notify_publish(product: dict):
         "inline_keyboard": [
             [
                 {"text": "Title", "copy_text": {"text": product["title"]}},
-                {"text": "Price",  "copy_text": {"text": product["price"]}},
+                {"text": "Product",  "copy_text": {"text": product["product"]}},
             ],
             [
-                {"text": "Location",   "copy_text": {"text": product["location"]}},
-                {"text": "Link",   "copy_text": {"text": product["url"]}},
+                {"text": "Price",  "copy_text": {"text": product["price"]}},
+                {"text": "Brand",  "copy_text": {"text": product["brand"]}},
+            ],
+            [
+                {"text": "Description",  "copy_text": {"text": product["description"]}},
+                {"text": "Images",  "copy_text": {"text": product["images"]}},
+            ],
+            [
+                {"text": "Condition",  "copy_text": {"text": product["condition"]}},
+                {"text": "Hashtags",  "copy_text": {"text": product["hashtags"]}},
             ],
             [
                 {"text": "Copy All", "copy_text": {"text": text}},
