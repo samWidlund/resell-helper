@@ -1,4 +1,4 @@
-name: productScraper Workflow
+name: Scraping workflow
 on:
   schedule:
     - cron: '30  10  *  *  *'

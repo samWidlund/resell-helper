@@ -49,7 +49,7 @@ After years of reselling clothes, I grew tired of manually searching marketplace
 
 1. Clone the repository: 
 ```bash
-git clone https://github.com/samWidlund/productScraper.git
+git clone https://github.com/samWidlund/resell-helper.git
 ```
 2. Create and activate a virtual environment
 

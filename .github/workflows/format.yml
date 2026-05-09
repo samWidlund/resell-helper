@@ -1,4 +1,4 @@
-name: Publish helper
+name: Publish workflow
 run-name: Product information formatting
 on: workflow_dispatch
 
