@@ -1,24 +1,36 @@
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from notification.telegramBot import notify_publish
 
+# Set up Google Sheets API credentials
 scope = [
     'https://www.googleapis.com/auth/spreadsheets',
     'https://www.googleapis.com/auth/drive'
 ]
-
 credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
 client = gspread.authorize(credentials)
 
 # Open the Google Sheet
 sheet = client.open('publishProducts').sheet1
-
-# Fetch all rows of data
 records = sheet.get_all_values()
+
+# Function to return col position as letter
+def col_letter(n):
+    letter = ''
+    while n > 0:
+        n -= 1
+        letter = chr(n % 26 + ord('A')) + letter
+        n //= 26
+    return letter
+
+# Find pos of publish boolean in sheet
+cell = sheet.find("TRUE")
+print(col_letter(cell.col) + str(cell.row)) 
+cel_pos = col_letter(cell.col) + str(cell.row) # only first one is used, if there are multiple TRUE values, only the first one will be sent to telegram and then all will be set to FALSE
+
 
 # Send products to Telegram
 for record in records:
@@ -36,5 +48,7 @@ for record in records:
     }
 
     for r in product:
-        if product[r] == "TRUE": # If boolean in sheet is set to True (which is set when scipt is triggered), send this specific row/product to Telegram
+        if product[r] == "TRUE": # Send message if publish boolean is true
             notify_publish(product)
+
+sheet.update_acell(cel_pos, 'FALSE') # restore publish boolean to false after script is ran
