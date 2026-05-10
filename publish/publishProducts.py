@@ -21,7 +21,6 @@ sheet = client.open('publishProducts').sheet1
 records = sheet.get_all_values()
 
 # Send products to Telegram
-
 for record in records:
     print(record)
     product = {
@@ -32,10 +31,10 @@ for record in records:
         "description": record[4],
         "images": record[5],
         "condition": record[6],
-        "hashtags": record[7]
+        "hashtags": record[7],
+        "publish": record[8]
     }
 
     for r in product:
-        print(product[r])
-    
-    notify_publish(product)
+        if product[r] == "TRUE": # If boolean in sheet is set to True (which is set when scipt is triggered), send this specific row/product to Telegram
+            notify_publish(product)
