@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Push trigger in workflow.
 
+### Added
+
+- Helper tool to make the process of publishing listings om multiple marketplaces easier.
+    - Created using python script connected to google sheet and telegram bot.
+
 ## [0.1.0] - 2026-04-03
 
 ### Added
