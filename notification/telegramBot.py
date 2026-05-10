@@ -59,14 +59,14 @@ def notify_publish(product: dict):
     url_api = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
     text = (
-        f"{product['title']}\n"
-        f"{product['product']}\n"
-        f"{product['price']}\n"
-        f"{product['brand']}\n"
-        f"{product['description']}\n"
-        f"{product['images']}\n"
-        f"{product['condition']}\n"
-        f"{product['hashtags']}\n"
+        f"title: {product['title']}\n"
+        f"product: {product['product']}\n"
+        f"price: {product['price']}\n"
+        f"brand: {product['brand']}\n"
+        f"description: {product['description']}\n"
+        f"images: {product['images']}\n"
+        f"condition: {product['condition']}\n"
+        f"hashtags: {product['hashtags']}\n"
 
 
     )
