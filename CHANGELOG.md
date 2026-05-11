@@ -19,13 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Helper tool to make the process of publishing listings om multiple marketplaces easier.
-    - Created using python script connected to google sheet and telegram bot.
 
 ## [0.1.0] - 2026-04-03
 
 ### Added
 
-- Working scraping tools for blocket, ebay, facebook, tradera and vinted.
+- Scraping tools for blocket, ebay, facebook, tradera and vinted.
 - Automated workflow using github actions, optional input parameters.
 - Global fetch variables which can be changed to match preference, also used as fallback when workflow input is empty.
 - README with description and setup guide.
