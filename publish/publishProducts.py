@@ -52,5 +52,7 @@ for record in records:
     for r in product:
         if product[r] == "TRUE": # Send message if publish boolean is true
             notify_publish(product)
+        else:
+            pass
 
-sheet.update_acell(cel_pos, 'FALSE')
+sheet.update_acell(cel_pos, 'FALSE') # Restore sheet boolean
