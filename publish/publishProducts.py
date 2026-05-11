@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from time import time
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -17,7 +18,7 @@ client = gspread.authorize(credentials)
 sheet = client.open('publishProducts').sheet1
 records = sheet.get_all_values()
 
-# Function to return col position as letter
+# Function to convert column number to letter
 def col_letter(n):
     letter = ''
     while n > 0:
@@ -28,9 +29,10 @@ def col_letter(n):
 
 # Find pos of publish boolean in sheet
 cell = sheet.find("TRUE")
-print(col_letter(cell.col) + str(cell.row)) 
+if cell is None:
+    print("No products to publish, could not find any TRUE value in the sheet.")
+    sys.exit(1)
 cel_pos = col_letter(cell.col) + str(cell.row) # only first one is used, if there are multiple TRUE values, only the first one will be sent to telegram and then all will be set to FALSE
-
 
 # Send products to Telegram
 for record in records:
@@ -51,4 +53,4 @@ for record in records:
         if product[r] == "TRUE": # Send message if publish boolean is true
             notify_publish(product)
 
-sheet.update_acell(cel_pos, 'FALSE') # restore publish boolean to false after script is ran
+sheet.update_acell(cel_pos, 'FALSE')
