@@ -27,24 +27,14 @@ def col_letter(n):
         n //= 26
     return letter
 
-# Find pos of publish boolean in sheet
 cell = sheet.findall("TRUE")
 print(cell)
-for r in cell:
-    print(r.col, r.row)
 
 if cell is None:
     print("No products to publish, could not find any TRUE value in the sheet.")
     sys.exit(1)
 
-for r in cell:
-    cel_pos = col_letter[r](cell.col) + str(cell.row) # only first one is used, if there are multiple TRUE values, only the first one will be sent to telegram and then all will be set to FALSE
-    
-# cel_pos = col_letter(cell.col) + str(cell.row) # only first one is used, if there are multiple TRUE values, only the first one will be sent to telegram and then all will be set to FALSE
-
-# Send products to Telegram
 for record in records:
-    print(record)
     product = {
         "title": record[0],
         "product": record[1],
@@ -63,4 +53,6 @@ for record in records:
         else:
             pass
 
-# sheet.update_acell(cel_pos, 'FALSE') # Restore sheet boolean
+for c in cell:
+    print("Restoring" + col_letter(c.col) + str(c.row))
+    sheet.update_acell(col_letter(c.col) + str(c.row), 'FALSE') # Set publish boolean to FALSE after sending message
