@@ -1,6 +1,5 @@
 import sys
 from pathlib import Path
-from time import time
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
