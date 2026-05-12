@@ -53,5 +53,5 @@ for record in records:
             pass
 
 for c in cell:
-    print("Restoring" + col_letter(c.col) + str(c.row))
+    print("Restoring " + col_letter(c.col) + str(c.row))
     sheet.update_acell(col_letter(c.col) + str(c.row), 'FALSE') # Set publish boolean to FALSE after sending message
