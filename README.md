@@ -7,7 +7,7 @@
 
 # Automated marketplace tool for resellers
 
-Automated marketplace scraper that monitors online platforms for products and notifies users via Telegram push notification. Also helps users publish products across platforms via Google Sheets.
+Marketplace scraper and publish tool that makes a reseller's daily life easier by combining multiple APIs, GitHub Actions, Telegram, and Google Sheets.
 
 ## Background
 
