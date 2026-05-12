@@ -15,13 +15,13 @@ db.login()
 total_items = 0
 new_items = 0
 
-scraper = VintedScraper("https://www.vinted.com")
+# scraper = VintedScraper("https://www.vinted.com")
 se_scraper = VintedScraper("https://www.vinted.se")
-items = scraper.search({"search_text": search_term})
+# items = scraper.search({"search_text": search_term})
 se_items = se_scraper.search({"search_text": search_term})
 
 print("Fetching vinted marketplace...")
-for item in items + se_items:
+for item in se_items: # removed + items to only fetch from sweden for now
     print(f"{item.title} - {item.price} {item.currency} - {item.url} - {item.id}")
 
     if item.currency == "USD" and (item.price > max_price_usd or item.price < min_price_usd):
