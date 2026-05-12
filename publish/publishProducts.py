@@ -41,10 +41,9 @@ for record in records:
         "price": record[2],
         "brand": record[3],
         "description": record[4],
-        "images": record[5],
-        "condition": record[6],
-        "hashtags": record[7],
-        "publish": record[8]
+        "condition": record[5],
+        "hashtags": record[6],
+        "publish": record[7]
     }
 
     for r in product:

@@ -64,7 +64,6 @@ def notify_publish(product: dict):
         f"price: {product['price']}\n"
         f"brand: {product['brand']}\n"
         f"description: {product['description']}\n"
-        f"images: {product['images']}\n"
         f"condition: {product['condition']}\n"
         f"hashtags: {product['hashtags']}\n"
 
@@ -85,15 +84,12 @@ def notify_publish(product: dict):
             ],
             [
                 {"text": "Description",  "copy_text": {"text": product["description"]}},
-                {"text": "Images",  "copy_text": {"text": product["images"]}},
-            ],
-            [
                 {"text": "Condition",  "copy_text": {"text": product["condition"]}},
-                {"text": "Hashtags",  "copy_text": {"text": product["hashtags"]}},
             ],
             [
+                {"text": "Hashtags",  "copy_text": {"text": product["hashtags"]}},
                 {"text": "Copy All", "copy_text": {"text": text}},
-            ]
+            ],
         ]}
 
     try:
