@@ -5,13 +5,13 @@
 [![Apify](https://img.shields.io/badge/Apify-2D4BF0?style=flat)](https://apify.com/)
 [![Requests](https://img.shields.io/badge/Requests-002545?style=flat)](https://requests.readthedocs.io/)
 
-# Automated product scraping tool for resellers
+# Automated marketplace tool for resellers
 
-Automated marketplace scraper that monitors online platforms for products and notifies users via Telegram push notification. Combining multiple scraper APIs into one simple easy-to-use application.
+Automated marketplace scraper that monitors online platforms for products and notifies users via Telegram push notification. Also helps users publish products across platforms via Google Sheets.
 
 ## Background
 
-After years of reselling clothes, I grew tired of manually searching marketplaces for the best deals. Instead of spending hours doing it myself, I built a tool that automates the process and lets software handle the work for me.
+After years of reselling clothes, I grew tired of manually searching marketplaces for the best deals. Instead of spending hours doing it myself, I built a tool that automates the process and lets software handle the work for me. During the development process I also realized the fact that publishing products att different marketplaces is also kind of a hassle to do. With that in mind I later on implemented a feature to simplify this process.
 
 ## Features
 
@@ -20,6 +20,7 @@ After years of reselling clothes, I grew tired of manually searching marketplace
 - Product filtering by keyword and price
    - One simple search term + price cap across all platforms
 - Database integration preventing repeated notifications
+- Cross-platform publishing via Google Sheets
 
 ## Supported Platforms
 
@@ -216,17 +217,31 @@ CREATE POLICY "Users can only see their own data" ON ebay_products
 
 > **Note:** Supabase automatically pauses the project/database after 7 days of inactivity. Visit [supabase.com](https://supabase.com) to restore your database, may take minutes up to several hours.
 
+### Publishing
+
+The `publish/` tool posts products to multiple platforms simultaneously using a Google Sheet as the source of truth.
+
+**Setup:**
+
+1. Enable the Google Sheets API and create service account credentials
+2. Download the credentials JSON and save as `credentials.json` in the project root
+3. Share your Google Sheet (named `publishProducts`) with the service account email
+4. Populate the sheet with product data (title, price, description, images)
+
+**Run:**
+
+```bash
+python3 publish/publishProducts.py
+```
+
+The script reads the first two rows from the sheet and prints them — extend it to integrate with your target platforms.
+
+> **Note:** `gspread` and `oauth2client` are required. Install with `pip install gspread oauth2client`.
+
 ### Running
 
 **Locally:**
 > **Note:** Replace [PLATFORM_NAME] with the correspondig platform e.g. `facebook` and [FETCH_SCRIPT] with the python script e.g. `fb_marketplace.py`
-- Windows
-
-```powershell
-python fetch/[PLATFORM_NAME]/[FETCH_SCRIPT].py
-```
-
-- Linux / macOS
 
 ```bash
 python3 fetch/[PLATFORM_NAME]/[FETCH_SCRIPT].py
@@ -246,7 +261,7 @@ Configured to run every 3 hours via github actions. See `.github/workflows/workf
 │   ├── tradera/
 │   └── vinted/
 ├── database/                 # Database operations
-├── publish/                  # Publishing utilities (currently empty)
+├── publish/                  # Cross-platform publishing tool (Google Sheets)
 ├── notification/             # User bot notificiation       
 └── README.md
 ```
