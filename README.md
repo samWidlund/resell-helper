@@ -2,8 +2,6 @@
 [![Supabase](https://img.shields.io/badge/Supabase--gray?style=flat&logo=supabase)](https://supabase.com/)
 [![Telegram](https://img.shields.io/badge/Telegram-Bot-2CA5E0?style=flat&logo=telegram)](https://core.telegram.org/bots/api)
 [![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=githubactions&logoColor=FFFFFF)](https://github.com/features/actions)
-[![Apify](https://img.shields.io/badge/Apify-2D4BF0?style=flat)](https://apify.com/)
-[![Requests](https://img.shields.io/badge/Requests-002545?style=flat)](https://requests.readthedocs.io/)
 
 # Automated marketplace tool for resellers
 
