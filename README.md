@@ -9,7 +9,7 @@ Marketplace scraper and publish tool that makes a reseller's daily life easier b
 
 ## Background
 
-After years of reselling clothes, I grew tired of manually searching marketplaces for the best deals. Instead of spending hours doing it myself, I built a tool that automates the process and lets software handle the work for me. During the development process I also realized the fact that publishing products att different marketplaces is also kind of a hassle to do. With that in mind I later on implemented a feature to simplify this process.
+After years of reselling clothes, I grew tired of manually searching marketplaces for the best deals. Instead of spending hours doing it myself, I built a tool that automates the process and lets software handle the work for me. During the development process I also realized the fact that publishing products at different marketplaces is also kind of a hassle to do. With that in mind I later on implemented a feature to simplify this process.
 
 ## Features
 
@@ -19,6 +19,8 @@ After years of reselling clothes, I grew tired of manually searching marketplace
    - One simple search term + price cap across all platforms
 - Database integration preventing repeated notifications
 - Cross-platform publishing via Google Sheets
+
+# Scraper tool
 
 ## Supported Platforms
 
