@@ -92,7 +92,7 @@ jobs:
         run: pip install --upgrade pip
 
       - name: Install tradera_api
-        run: pip install tradera_api python-dotenv requests supabase
+        run: pip install tradera_api python-dotenv requests supabase python-telegram-bot
       
       - name: Run tradera_marketplace.py
         run: python fetch/tradera/tradera_marketplace.py
