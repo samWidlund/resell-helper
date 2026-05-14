@@ -9,17 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- If statement in workflow to prevent skipping.
-- Changed project name to ``resell-helper``
-- Improved error handling
+- Renamed project name to ``resell-helper``.
+- Improved error handling in scripts and workflow.
+- Renamed workflows.
 
 ### Removed
 
 - Push trigger in workflow.
+- Unused import of python packages.
 
 ### Added
 
-- Helper tool to make the process of publishing listings om multiple marketplaces easier.
+- Helper tool to make the process of publishing listings on multiple marketplaces easier.
+- Documentation for publish tool in ``README.md``.
 
 ## [0.1.0] - 2026-04-03
 
