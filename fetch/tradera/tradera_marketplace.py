@@ -10,20 +10,19 @@ from notification.telegramBot import notify_product, get_sent_notifications
 from database.database import SupabaseClient
 from fetch.fetch_variables import search_term, max_price_sek, min_price_sek
 
-api = TraderaAPI()
-
-search_types = [AuctionType.auction, AuctionType.buy_now]
 
 def find_items(response: dict):
+    if not isinstance(response, dict):
+        return []
     for k in ("items", "results", "hits", "itemsResult", "data"):
         v = response.get(k)
         if isinstance(v, list):
             return v
-    # fallback: first list value
     for v in response.values():
         if isinstance(v, list):
             return v
     return []
+
 
 def pick(item: dict, *keys):
     for k in keys:
@@ -31,21 +30,14 @@ def pick(item: dict, *keys):
             return item[k]
     return None
 
-# items can be using different keys for same data, so try different options for each field
+
 def extract_simple(item: dict):
-    # id
     _id = pick(item, "id", "listingId", "itemId", "Id", "ItemId")
-    
-    # title - try more variations
-    title = pick(item, 
-                 "title", "name", "listingTitle", "itemName", 
+    title = pick(item,
+                 "title", "name", "listingTitle", "itemName",
                  "shortDescription", "heading", "Title", "Name") or ""
-    
-    # If still empty, try nested structures
     if not title and "item" in item:
         title = pick(item["item"], "title", "name", "Title") or ""
-    
-    # price and currency
     price_block = pick(item, "price", "currentPrice", "buyNowPrice", "startingPrice")
     if isinstance(price_block, dict):
         price = pick(price_block, "amount", "value", "Amount", "Value")
@@ -53,47 +45,70 @@ def extract_simple(item: dict):
     else:
         price = price_block
         currency = pick(item, "currency", "currencyCode") or "SEK"
-    
-    # url
     url = pick(item, "url", "itemUrl", "listingUrl", "link", "permalink", "Url")
     if not url and _id:
         url = f"{BASE_URL}item/{_id}"
-    
     return (_id, title, price, currency, url)
 
 
-# initialize supabase client and counters
-db = SupabaseClient()
-db.login()
+def main():
+    try:
+        api = TraderaAPI()
+    except Exception as e:
+        print(f"error: failed to initialize TraderaAPI: {e}")
+        sys.exit(1)
 
-total_items = 0
-new_items = 0
+    search_types = [AuctionType.auction, AuctionType.buy_now]
 
-for st in search_types:
-    res = api.search(query=search_term, price=(min_price_sek, max_price_sek), auction_type=st)
-    items = find_items(res)
-    if not items:
-        print(f"No items found for type {st.name} — showing a part of response:")
-        print(json.dumps(res, indent=2, ensure_ascii=False)[:2000])
-        continue
+    try:
+        db = SupabaseClient()
+        db.login()
+    except ValueError as e:
+        print(f"configuration error: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"error: failed to connect to database: {e}")
+        sys.exit(1)
 
-    for it in items[:50]:
-        total_items += 1
-        _id, title, price, currency, url = extract_simple(it)
-        print(f"Found item: {title} at {price} {currency} ({url})")
+    total_items = 0
+    new_items = 0
 
-        # normalize price to float when possible
+    for st in search_types:
         try:
-            price_val = float(price) if price is not None else None
-        except Exception:
-            price_val = None
+            res = api.search(query=search_term, price=(min_price_sek, max_price_sek), auction_type=st)
+        except Exception as e:
+            print(f"error: failed to search Tradera for type {st.name}: {e}")
+            continue
 
-        # check DB and add + notify if new
-        if db.is_new_product("tradera_products", str(_id)):
-            db.add_product("tradera_products", str(_id), title, price_val, currency or "SEK", url)
-            notify_product("tradera", title, price_val, currency or "SEK", url, auction_type=st.name)
-            new_items += 1
+        items = find_items(res)
+        if not items:
+            print(f"No items found for type {st.name}")
+            continue
 
-print(f"Total items found: {total_items}")
-print(f"New items found: {new_items}")
-print(f"Sent notifications: {get_sent_notifications()}")
+        for it in items[:50]:
+            try:
+                total_items += 1
+                _id, title, price, currency, url = extract_simple(it)
+                print(f"Found item: {title} at {price} {currency} ({url})")
+
+                try:
+                    price_val = float(price) if price is not None else None
+                except (ValueError, TypeError):
+                    price_val = None
+
+                if db.is_new_product("tradera_products", str(_id)):
+                    db.add_product("tradera_products", str(_id), title, price_val, currency or "SEK", url)
+                    if not notify_product("tradera", title, price_val, currency or "SEK", url, auction_type=st.name):
+                        print(f"warning: failed to send notification for {title}")
+                    new_items += 1
+            except Exception as e:
+                print(f"error processing item: {e}")
+                continue
+
+    print(f"Total items found: {total_items}")
+    print(f"New items found: {new_items}")
+    print(f"Sent notifications: {get_sent_notifications()}")
+
+
+if __name__ == "__main__":
+    main()

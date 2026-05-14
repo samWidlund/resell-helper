@@ -12,82 +12,93 @@ from blocket_api import (
     Location,
 )
 
-## inital supabase client
-db = SupabaseClient()
-db.login()
 
-# # counter variables
-total_items = 0
-new_items = 0
+def main():
+    try:
+        db = SupabaseClient()
+        db.login()
+    except ValueError as e:
+        print(f"configuration error: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"error: failed to connect to database: {e}")
+        sys.exit(1)
 
-## blocket API client
-api = BlocketAPI()
+    total_items = 0
+    new_items = 0
 
-# all swedish region blocket locations
-BLEKINGE = Location.BLEKINGE
-DALARNA = Location.DALARNA
-GOTLAND = Location.GOTLAND
-GAVLEBORG = Location.GAVLEBORG
-HALLAND = Location.HALLAND
-JAMTLAND = Location.JAMTLAND
-JONKOPING = Location.JONKOPING
-KALMAR = Location.KALMAR
-KRONOBERG = Location.KRONOBERG
-NORRBOTTEN = Location.NORRBOTTEN
-SKANE = Location.SKANE
-STOCKHOLM = Location.STOCKHOLM
-SODERMANLAND = Location.SODERMANLAND
-UPPSALA = Location.UPPSALA
-VARMLAND = Location.VARMLAND
-VASTERBOTTEN = Location.VASTERBOTTEN
-VASTERNORRLAND = Location.VASTERNORRLAND
-VASTMANLAND = Location.VASTMANLAND
-VASTRA_GOTALAND = Location.VASTRA_GOTALAND
-OREBRO = Location.OREBRO
-OSTERGOTLAND = Location.OSTERGOTLAND
+    try:
+        api = BlocketAPI()
+    except Exception as e:
+        print(f"error: failed to initialize BlocketAPI: {e}")
+        sys.exit(1)
 
-all_locations = [
-    BLEKINGE, DALARNA, GOTLAND, GAVLEBORG, HALLAND, JAMTLAND, JONKOPING,
-    KALMAR, KRONOBERG, NORRBOTTEN, SKANE, STOCKHOLM, SODERMANLAND, UPPSALA,
-    VARMLAND, VASTERBOTTEN, VASTERNORRLAND, VASTMANLAND, VASTRA_GOTALAND,
-    OREBRO, OSTERGOTLAND
-]
+    all_locations = [
+        Location.BLEKINGE, Location.DALARNA, Location.GOTLAND, Location.GAVLEBORG,
+        Location.HALLAND, Location.JAMTLAND, Location.JONKOPING, Location.KALMAR,
+        Location.KRONOBERG, Location.NORRBOTTEN, Location.SKANE, Location.STOCKHOLM,
+        Location.SODERMANLAND, Location.UPPSALA, Location.VARMLAND, Location.VASTERBOTTEN,
+        Location.VASTERNORRLAND, Location.VASTMANLAND, Location.VASTRA_GOTALAND,
+        Location.OREBRO, Location.OSTERGOTLAND
+    ]
 
-# search all of blocket
-response = api.search(
-    search_term,
-    sort_order=SortOrder.PRICE_ASC,
-    locations=all_locations
-    )
+    try:
+        response = api.search(
+            search_term,
+            sort_order=SortOrder.PRICE_ASC,
+            locations=all_locations
+        )
+    except Exception as e:
+        print(f"error: failed to search Blocket: {e}")
+        sys.exit(1)
 
-# The actual products are in the 'docs' key
-products = response['docs']
+    if not isinstance(response, dict):
+        print(f"error: unexpected response type from Blocket API: {type(response).__name__}")
+        sys.exit(1)
 
-for product in products:
-    heading = product.get('heading', 'N/A')
-    price = product.get('price', {})
-    amount = price.get('amount', 'N/A')
-    currency = price.get('price_unit', 'N/A')
-    product_id = product.get('id', 'N/A')
-    location = product.get('location', 'N/A')
-    url = product.get('canonical_url', 'N/A')
-    
-    print(f"Title: {heading}")
-    if amount > max_price_sek or amount < min_price_sek:
-        continue
+    products = response.get('docs', [])
+    if not products:
+        print("No products found from Blocket.")
+        sys.exit(1)
 
-    print(f"Price: {amount} {currency}")
-    print(f"Location: {location}")
-    print(f"ID: {product_id}")
-    print(f"URL: {url}")
-    total_items += 1
+    for product in products:
+        try:
+            heading = product.get('heading', 'N/A')
+            price = product.get('price', {})
+            amount = price.get('amount')
+            if amount is None or not isinstance(amount, (int, float)):
+                print(f"Skipping item '{heading}' without valid price")
+                continue
 
-    if db.is_new_product("blocket_products", product_id): # notify user and and product to db if new
-        db.add_product("blocket_products", product_id, heading, amount, currency, url)
-        notify_product("blocket",heading, amount, currency, url)
-        new_items += 1
-        
-sent_notifications = get_sent_notifications()
-print(f"Total items found: {total_items}")
-print(f"New items found: {new_items}")
-print(f"Sent notifications: {sent_notifications}")
+            currency = price.get('price_unit', 'N/A')
+            product_id = product.get('id', 'N/A')
+            location = product.get('location', 'N/A')
+            url = product.get('canonical_url', 'N/A')
+
+            if amount > max_price_sek or amount < min_price_sek:
+                continue
+
+            print(f"Title: {heading}")
+            print(f"Price: {amount} {currency}")
+            print(f"Location: {location}")
+            print(f"ID: {product_id}")
+            print(f"URL: {url}")
+            total_items += 1
+
+            if db.is_new_product("blocket_products", product_id):
+                db.add_product("blocket_products", product_id, heading, amount, currency, url)
+                if not notify_product("blocket", heading, amount, currency, url):
+                    print(f"warning: failed to send notification for {heading}")
+                new_items += 1
+        except Exception as e:
+            print(f"error processing item {product.get('id', 'unknown')}: {e}")
+            continue
+
+    sent_notifications = get_sent_notifications()
+    print(f"Total items found: {total_items}")
+    print(f"New items found: {new_items}")
+    print(f"Sent notifications: {sent_notifications}")
+
+
+if __name__ == "__main__":
+    main()
