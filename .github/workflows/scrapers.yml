@@ -1,7 +1,7 @@
 name: Scraping workflow
 on:
-  schedule:
-    - cron: '30  10  *  *  *'
+#  schedule:
+ #   - cron: '30  10  *  *  *'
 
   workflow_dispatch:
     inputs:
